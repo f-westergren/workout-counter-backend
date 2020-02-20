@@ -1,0 +1,7 @@
+post http://localhost:3001/api/athletes
+Content-Type: application/json
+
+{
+    "name": "Arnold Schwartzenegger",
+    "workouts": []
+}
