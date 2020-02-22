@@ -1,8 +1,8 @@
-put http://localhost:3001/api/athletes/3/workouts/
+post http://localhost:3001/api/athletes/5e4fe8755f02643bf0a5bbff
 Content-Type: application/json
 
 {
-    "type": "Crossfit",
-    "date": "2020-02-16",
-    "note": "AAAARGH!"
+    "type": "Gym",
+    "date": "2020-02-03",
+    "note": "Gymma gymma gymma!"
 }
