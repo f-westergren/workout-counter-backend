@@ -2,17 +2,5 @@ post http://localhost:3001/api/athletes
 Content-Type: application/json
 
 {
-    "name": "Bosse Bildoktorn3",
-    "workouts": [
-        {
-            "type": "Crossfit",
-            "date": "2020-02-03",
-            "note": "Folkes hard workout!"
-        },
-        {
-            "type": "Gym",
-            "date": "2020-02-04",
-            "note": "Folkes hard gym sesh!"
-        }
-    ]
+    "name": "Bosse Bildoktorn3"
 }

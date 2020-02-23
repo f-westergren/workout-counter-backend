@@ -1,9 +1,17 @@
 const mongoose = require('mongoose')
 
+const workoutSchema = new mongoose.Schema({
+  type: String,
+  date: Date,
+  note: String
+})
+
 const athleteSchema = new mongoose.Schema({
   name: String,
-  workouts: Array
+  workouts: [workoutSchema]
 })
+
+
 
 athleteSchema.set('toJSON', {
   transform: (document, returnedObject) => {

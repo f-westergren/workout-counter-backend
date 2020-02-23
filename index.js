@@ -6,7 +6,6 @@ const cors = require('cors')
 const morgan = require('morgan')
 const mongoose = require('mongoose')
 const Athlete = require('./models/athlete')
-const Workout = require('./models/workout')
 
 const url = process.env.MONGODB_URI
 
@@ -96,21 +95,13 @@ app.delete('/api/athletes/:athleteId', (req, res, next) => {
 // Delete specific Workout
 app.delete('/api/athletes/:athleteId/workouts/:workoutId', (req, res, next) => {
   Athlete.findById(req.params.athleteId)
-  .then(athlete => {
-    if (athlete) {
-      let workout = athlete.workouts.filter((workout) => {
-        return workout._id.toString() === req.params.workoutId
-      
-      workout = workout.shift()
-    }) 
-    console.log(workout)
-    
-    } else {
-      res.status(204).end()
-    }
-})
-  .catch(error => next(error))
-})
+  .then(workout => {
+    workout.workouts.id(req.params.workoutId).remove()
+    workout.save()
+    res.status(204).end()
+  })
+    .catch(error => next(error))
+})  
 
 // Add Athlete
 app.post('/api/athletes', (req, res) => {
@@ -146,11 +137,11 @@ app.post('/api/athletes/:athleteId', (req, res, next) => {
   console.log('Params:', req.params)
   console.log('Name:', body.name)
 
-  const workout = new Workout({
+  const workout = {
     type: body.type,
     date: body.date,
     note: body.note
-  })
+  }
 
   console.log('Schema:', workout)
 
