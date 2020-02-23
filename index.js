@@ -27,28 +27,25 @@ app.use(cors())
 morgan.token('reqData', (req) => JSON.stringify(req.body))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :req[header] :reqData'))
 
-
-const generateRandomId = (max) => Math.floor(Math.random() * Math.floor(max))
-
 app.get('/', (req, res) => {
-  Athlete.find({}).then(persons => {
-    res.json(persons)
+  Athlete.find({}).then(athletes => {
+    res.json(athletes)
   })
 })
 
 //Get athletes
 app.get('/api/athletes', (req, res) => {
-  Athlete.find({}).then(persons => {
-    res.json(persons)
+  Athlete.find({}).then(athletes => {
+    res.json(athletes)
   })
 })
-
 
 // Get specific Athlete
 app.get('/api/athletes/:athleteId', (req, res, next) => {
   Athlete.findById(req.params.athleteId)
     .then(athlete => {
       if (athlete) {
+        console.log(athlete)
       res.json(athlete.toJSON())
       } else {
         res.status(404).end()
@@ -72,16 +69,20 @@ app.get('/api/athletes/:athleteId/workouts', (req, res, next) => {
 
 // Get specific Workout
 app.get('/api/athletes/:athleteId/workouts/:workoutId', (req, res, next) => {
-  Workout.findById(req.params.workoutId)
-    .then(workout => {
-      if (workout) {
-        res.json(workout.toJSON())
+  console.log('WorkoutID', req.params.workoutId)
+  Athlete.findById(req.params.athleteId)
+    .then(athlete => {
+      if (athlete) {
+        let workout = athlete.workouts.filter((workout) => {
+          return workout._id.toString() === req.params.workoutId
+      }) 
+      res.json(workout.shift())
       } else {
         res.status(404).end()
       }
-    })
-    .catch(error => next(error))
   })
+    .catch(error => next(error))
+})
 
 // Delete specific Athlete
 app.delete('/api/athletes/:athleteId', (req, res, next) => {
@@ -93,15 +94,22 @@ app.delete('/api/athletes/:athleteId', (req, res, next) => {
 })
 
 // Delete specific Workout
-app.delete('/api/athletes/:athleteId/workouts/:workoutId', (req, res) => {
-  const athleteId = Number(req.params.athleteId)
-  const workoutId = Number(req.params.workoutId)
-
-  const athlete = athletes.find(athlete => athlete.athleteId === athleteId)
-
-  athlete.workouts = athlete.workouts.filter(workout => workout.workoutId !== workoutId)
-
-  res.status(204).end()
+app.delete('/api/athletes/:athleteId/workouts/:workoutId', (req, res, next) => {
+  Athlete.findById(req.params.athleteId)
+  .then(athlete => {
+    if (athlete) {
+      let workout = athlete.workouts.filter((workout) => {
+        return workout._id.toString() === req.params.workoutId
+      
+      workout = workout.shift()
+    }) 
+    console.log(workout)
+    
+    } else {
+      res.status(204).end()
+    }
+})
+  .catch(error => next(error))
 })
 
 // Add Athlete

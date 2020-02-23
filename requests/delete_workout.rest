@@ -1,1 +1,1 @@
-delete http://localhost:3001/api/athletes/2/workouts/6222
+delete http://localhost:3001/api/athletes/5e4f086ad041b810dcf8f3c7/workouts/5e4feb7b60e6d22ad4b677a5
